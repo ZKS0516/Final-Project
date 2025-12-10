@@ -8,3 +8,56 @@
     padding: 10px 20px;
     font-size: 16px;
 }
+
+/* ========= 讓登入/註冊頁面置中 ========== */
+body {
+    margin: 0;
+    height: 100vh;                /* 佔滿畫面 */
+    display: flex;                /* Flexbox 排版 */
+    justify-content: center;      /* 水平置中 */
+    align-items: center;          /* 垂直置中 */
+    background-color: #f2f2f2;    /* 淺灰背景 */
+}
+
+/* ========= 共用登入/註冊框樣式 ========== */
+.auth-container {
+    width: 320px;
+    padding: 25px;
+    background: white;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+}
+
+/* ========= 輸入框樣式 ========== */
+.auth-container input {
+    width: 90%;
+    padding: 10px;
+    margin: 10px 0;
+    font-size: 16px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+
+/* ========= 按鈕樣式 ========== */
+.auth-container button {
+    width: 95%;
+    padding: 10px;
+    margin-top: 10px;
+    font-size: 16px;
+    background: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.auth-container button:hover {
+    background: #45a049;
+}
+
+/* ========= 註冊/登入連結底部 ========== */
+.auth-links {
+    margin-top: 15px;
+    font-size: 14px;
+}
