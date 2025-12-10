@@ -39,7 +39,7 @@ body::before {
     border-radius: 12px;
     text-align: center;
     box-shadow: 0 0 20px rgba(0,0,0,0.3);
-    backdrop-filter: blur(30px);           /* 毛玻璃 */
+    backdrop-filter: blur(30px); /* 毛玻璃 */
 }
 
 /* 輸入框 */
@@ -69,15 +69,91 @@ body::before {
     background: #45a049;
 }
 
-/* 登入/註冊連結 */
+/* 註冊/登入連結 */
 .auth-links {
     margin-top: 15px;
     font-size: 14px;
 }
 
 
+
 /* ===============================
-   購物頁面 & 其他頁面樣式（原本保留）
+   購物頁面專用：取消登入頁的置中
+================================ */
+.shopping-body {
+    display: block !important; /* 取消 flex 置中 */
+    height: 100vh;
+    background-image: url("../img/login_bg.jpg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+
+
+/* ===============================
+   左側功能欄 Sidebar
+================================ */
+.sidebar {
+    width: 220px;
+    height: 100vh;
+    background: rgba(0,0,0,0.55);
+    padding: 20px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    backdrop-filter: blur(10px);
+}
+
+.sidebar-title {
+    color: white;
+    margin-bottom: 20px;
+    font-size: 22px;
+    border-bottom: 1px solid white;
+    padding-bottom: 10px;
+}
+
+/* 按鈕樣式 */
+.sidebar-btn {
+    width: 100%;
+    padding: 12px;
+    margin-top: 15px;
+    font-size: 16px;
+    background: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.sidebar-btn:hover {
+    background: #45a049;
+}
+
+/* 登出按鈕 */
+.logout-btn {
+    background: #d9534f;
+}
+
+.logout-btn:hover {
+    background: #c9302c;
+}
+
+
+
+/* ===============================
+   主內容區（右側）
+================================ */
+.content-area {
+    margin-left: 240px; /* 空出 Sidebar 寬度 */
+    padding: 30px;
+    color: white;
+}
+
+
+
+/* ===============================
+   其他共用樣式（若之後需要）
 ================================ */
 .main-container {
     text-align: center;
@@ -88,4 +164,10 @@ body::before {
     margin: 10px;
     padding: 10px 20px;
     font-size: 16px;
+}
+
+.sidebar-user {
+    color: white;
+    font-size: 18px;
+    margin-bottom: 20px;
 }

@@ -27,7 +27,9 @@ def shopping():
     # 如果尚未登入 → 不能訪問
     if 'user_id' not in session:
         return redirect(url_for('login'))
-    return render_template("shopping.html")
+
+    # ★ 將登入使用者的姓名傳給 shopping.html
+    return render_template("shopping.html", username=session.get('name'))
 
 @app.route('/shoppingcart')
 def shoppingcart():
@@ -42,7 +44,7 @@ def user():
     return render_template("user.html")
 
 # ============================================================
-# 登出功能（★ 新增）
+# 登出功能
 # ============================================================
 
 @app.route('/logout')

@@ -1,4 +1,4 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
@@ -6,18 +6,24 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 
-<body>
-    <div class="main-container">
-        <h2>購物頁面</h2>
+<body class="shopping-body">
 
-        <!-- 導覽按鈕 -->
-        <div class="nav-buttons">
-            <a href="{{ url_for('shoppingcart') }}"><button>購物車</button></a>
-            <a href="{{ url_for('user') }}"><button>宿主</button></a>
-            <a href="{{ url_for('logout') }}"><button>登出</button></a> <!-- ★ 新增登出按鈕 -->
-        </div>
+    <!-- 左側欄 -->
+    <div class="sidebar">
+        <h2 class="sidebar-title">購物頁面</h2>
 
-        <br>
+        <!-- ★ 顯示登入姓名 -->
+        <p class="sidebar-user">歡迎，{{ username }}</p>
+
+        <a href="{{ url_for('shoppingcart') }}"><button class="sidebar-btn">購物車</button></a>
+        <a href="{{ url_for('user') }}"><button class="sidebar-btn">宿主</button></a>
+        <a href="{{ url_for('logout') }}"><button class="sidebar-btn logout-btn">登出</button></a>
     </div>
+
+    <!-- 右側主內容 -->
+    <div class="content-area">
+        <h2 style="color: white;">歡迎來到購物頁面</h2>
+    </div>
+
 </body>
 </html>
