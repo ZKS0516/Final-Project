@@ -1,35 +1,48 @@
-.main-container {
-    text-align: center;
-    margin-top: 40px;
-}
-
-.nav-buttons button {
-    margin: 10px;
-    padding: 10px 20px;
-    font-size: 16px;
-}
-
-/* ========= 讓登入/註冊頁面置中 ========== */
+/* ===============================
+   登入 / 註冊頁背景 & 置中
+================================ */
 body {
     margin: 0;
-    height: 100vh;                /* 佔滿畫面 */
-    display: flex;                /* Flexbox 排版 */
-    justify-content: center;      /* 水平置中 */
-    align-items: center;          /* 垂直置中 */
-    background-color: #f2f2f2;    /* 淺灰背景 */
+    height: 100vh;
+
+    /* 自訂背景圖（放在 static/img/） */
+    background-image: url("../img/login_bg.jpg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-/* ========= 共用登入/註冊框樣式 ========== */
+/* 背景遮罩（讓登入框更清楚） */
+body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.45); /* 讓背景變暗 */
+    z-index: -1;
+}
+
+/* ===============================
+   登入 / 註冊框（毛玻璃效果）
+================================ */
 .auth-container {
     width: 320px;
     padding: 25px;
-    background: white;
+    background: rgba(255, 255, 255, 0.85); /* 半透明白色 */
     border-radius: 12px;
     text-align: center;
-    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+    box-shadow: 0 0 20px rgba(0,0,0,0.3);
+    backdrop-filter: blur(30px);           /* 毛玻璃 */
 }
 
-/* ========= 輸入框樣式 ========== */
+/* 輸入框 */
 .auth-container input {
     width: 90%;
     padding: 10px;
@@ -39,7 +52,7 @@ body {
     border: 1px solid #ccc;
 }
 
-/* ========= 按鈕樣式 ========== */
+/* 按鈕 */
 .auth-container button {
     width: 95%;
     padding: 10px;
@@ -56,8 +69,23 @@ body {
     background: #45a049;
 }
 
-/* ========= 註冊/登入連結底部 ========== */
+/* 登入/註冊連結 */
 .auth-links {
     margin-top: 15px;
     font-size: 14px;
+}
+
+
+/* ===============================
+   購物頁面 & 其他頁面樣式（原本保留）
+================================ */
+.main-container {
+    text-align: center;
+    margin-top: 40px;
+}
+
+.nav-buttons button {
+    margin: 10px;
+    padding: 10px 20px;
+    font-size: 16px;
 }
