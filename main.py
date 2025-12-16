@@ -237,4 +237,4 @@ if __name__ == "__main__":
     init_db()       # 建立表格
     load_items()    # 匯入道具
     print("資料庫初始化 + 道具匯入完成！")
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=5000)
