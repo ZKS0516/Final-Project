@@ -111,14 +111,22 @@ body::before {
 .cart-qty-control button {
     width: 28px;
     height: 28px;
+
+    display: flex;              /* ★ 關鍵 */
+    align-items: center;        /* ★ 垂直置中 */
+    justify-content: center;    /* ★ 水平置中 */
+
     font-size: 18px;
     font-weight: bold;
+    line-height: 1;             /* ★ 避免字型影響 */
+
     background-color: #333;
     color: #fff;
     border: none;
     border-radius: 4px;
     cursor: pointer;
 }
+
 
 .cart-qty-control input {
     width: 50px;
