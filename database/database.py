@@ -73,8 +73,8 @@ def init_db():
     CREATE TABLE IF NOT EXISTS Orders (
         order_id INTEGER PRIMARY KEY AUTOINCREMENT,
         user_id INTEGER,
-        order_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         total_price INTEGER,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         FOREIGN KEY(user_id) REFERENCES Users(user_id)
     )
     """)
@@ -93,6 +93,7 @@ def init_db():
         FOREIGN KEY(item_id) REFERENCES Items(item_id)
     )
     """)
+
 
     # ============================
     # 建立 Inventory 表
@@ -144,7 +145,7 @@ def load_items():
     count = cursor.fetchone()[0]
 
     if count == 0:  # 只有在空表時才匯入
-        with open("database\items.sql", "r", encoding="utf-8") as f:
+        with open("database/items.sql", "r", encoding="utf-8") as f:
             cursor.executescript(f.read())
         conn.commit()
         print("道具已成功匯入 Items 表！")
