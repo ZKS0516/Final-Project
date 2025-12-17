@@ -14,22 +14,25 @@
     <div class="sidebar">
         <h2 class="sidebar-title">購物頁面</h2>
 
-        <!-- 顯示登入姓名 -->
-        <p class="sidebar-user">歡迎，{{ username }}</p>
+        <div class="sidebar-user-row">
+            <span class="sidebar-user">歡迎，{{ username }}</span>
 
-        <!-- 導覽按鈕 -->
+            <a href="{{ url_for('logout') }}">
+                <button class="logout-mini-btn">登出</button>
+            </a>
+        </div>
+
         <a href="{{ url_for('shoppingcart') }}"><button class="sidebar-btn">購物車</button></a>
         <a href="{{ url_for('orders') }}"><button class="sidebar-btn">查看歷史訂單</button></a>
         <a href="{{ url_for('user') }}"><button class="sidebar-btn">宿主</button></a>
-        <a href="{{ url_for('logout') }}"><button class="sidebar-btn logout-btn">登出</button></a>
+
 
         <hr style="border: 1px solid #fff; margin: 20px 0;">
 
-        <!-- ===== 篩選器 Filter ===== -->
+        <!-- ===== 商品篩選 ===== -->
         <h3 class="filter-title">商品篩選</h3>
 
         <label class="filter-label">等級（可複選）</label>
-
         <div class="checkbox-group">
             <label><input type="checkbox" id="rarity-all"> 全部</label>
             <label><input type="checkbox" class="rarity-check" value="拉完了"> 拉完了</label>
@@ -38,7 +41,6 @@
             <label><input type="checkbox" class="rarity-check" value="頂級"> 頂級</label>
             <label><input type="checkbox" class="rarity-check" value="夯"> 夯</label>
         </div>
-
 
         <label class="filter-label">力量 ≥</label>
         <input id="filter-strength" type="number" min="0" value="0" class="filter-input">
@@ -55,8 +57,6 @@
     <!-- 右側主內容 -->
     <div class="content-area">
         <h2 style="color: white;">歡迎來到購物頁面</h2>
-
-        <!-- 商品展示區 -->
         <div id="itemsGrid" class="items-grid"></div>
     </div>
 

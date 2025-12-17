@@ -12,28 +12,30 @@
 
     <div class="sidebar">
         <h2 class="sidebar-title">購物車</h2>
-        <p class="sidebar-user">歡迎，{{ username }}</p>
+
+        <!-- 使用者列 -->
+        <div class="sidebar-user-row">
+            <span class="sidebar-user">歡迎，{{ username }}</span>
+            <a href="{{ url_for('logout') }}">
+                <button class="logout-mini-btn">登出</button>
+            </a>
+        </div>
 
         <a href="{{ url_for('shopping') }}"><button class="sidebar-btn">返回購物頁面</button></a>
-        <a href="{{ url_for('logout') }}"><button class="sidebar-btn logout-btn">登出</button></a>
     </div>
 
     <div class="content-area">
         <h2 style="color:white;">你的購物車</h2>
 
-        <!-- 全選 -->
         <div class="cart-select-all">
             <input type="checkbox" id="selectAll" onchange="toggleSelectAll(this)">
             <label for="selectAll" style="color:white;">全選</label>
         </div>
 
-        <!-- 購物車內容 -->
         <div id="cartItems" class="cart-items"></div>
 
-        <!-- 總金額 -->
         <h3 id="cartTotal" style="color:white; margin-top:20px;">總金額：0</h3>
 
-        <!-- 結帳 -->
         <button class="checkout-btn" onclick="checkout()">結帳</button>
     </div>
 
