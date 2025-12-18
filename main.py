@@ -338,7 +338,7 @@ def add_to_cart():
     return jsonify({"message": "加入購物車成功"})
 
 # ============================================================
-# API：查看購物車
+# API：查看購物車（含庫存）
 # ============================================================
 @app.route('/api/cart/view')
 def view_cart():
@@ -351,10 +351,11 @@ def view_cart():
 
     cursor.execute("""
         SELECT 
-            Items.item_id, 
-            Items.name, 
-            Items.price, 
-            Items.image_path, 
+            Items.item_id,
+            Items.name,
+            Items.price,
+            Items.image_path,
+            Items.stock,        -- ★ 加入庫存
             Cart.quantity
         FROM Cart
         JOIN Items ON Cart.item_id = Items.item_id
@@ -370,8 +371,9 @@ def view_cart():
             "item_id": item[0],
             "name": item[1],
             "price": item[2],
-            "image_path": item[3],   # ← 這裡才是 image_path
-            "quantity": item[4]      # ← 這裡才是 quantity
+            "image_path": item[3],
+            "stock": item[4],      # ★ 新增：庫存
+            "quantity": item[5]
         })
 
     return jsonify(cart)
@@ -399,7 +401,7 @@ def remove_from_cart():
     return jsonify({"message": "已移除商品"})
 
 # ============================================================
-# API：購務車調整數量
+# API：購物車調整數量（含庫存檢查）
 # ============================================================
 @app.route('/api/cart/update_quantity', methods=['POST'])
 def update_cart_quantity():
@@ -411,19 +413,55 @@ def update_cart_quantity():
     if not user_id:
         return jsonify({"error": "未登入"}), 401
 
+    if not item_id or quantity is None:
+        return jsonify({"error": "資料不完整"}), 400
+
+    # 最小值保護
+    if quantity < 1:
+        quantity = 1
+
     conn = sqlite3.connect("database/app.db")
     cursor = conn.cursor()
 
-    cursor.execute("""
+    # ⭐ 查詢庫存
+    cursor.execute(
+        "SELECT stock FROM Items WHERE item_id=?",
+        (item_id,)
+    )
+    row = cursor.fetchone()
+
+    if not row:
+        conn.close()
+        return jsonify({"error": "商品不存在"}), 404
+
+    stock = row[0]
+
+    # ⭐ 上限檢查
+    if quantity > stock:
+        conn.close()
+        return jsonify({
+            "error": "超過庫存上限",
+            "max_stock": stock
+        }), 400
+
+    # 更新購物車數量
+    cursor.execute(
+        """
         UPDATE Cart 
         SET quantity=? 
         WHERE user_id=? AND item_id=?
-    """, (quantity, user_id, item_id))
+        """,
+        (quantity, user_id, item_id)
+    )
 
     conn.commit()
     conn.close()
 
-    return jsonify({"message": "數量已更新"})
+    return jsonify({
+        "message": "數量已更新",
+        "quantity": quantity
+    })
+
 
 # ============================================================
 # API：結帳（含寫入 Inventory，並回傳最新餘額）

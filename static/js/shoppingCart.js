@@ -17,14 +17,21 @@ async function loadCart() {
         div.className = "cart-item";
 
         div.innerHTML = `
-            <input type="checkbox" class="cart-check" data-item-id="${item.item_id}" onchange="updateTotal(); syncSelectAll();">
+            <input type="checkbox"
+                   class="cart-check"
+                   data-item-id="${item.item_id}"
+                   onchange="updateTotal(); syncSelectAll();">
 
             <img src="/static/img/${item.image_path}" alt="${item.name}">
 
             <div class="cart-item-info">
                 <div class="cart-item-title">${item.name}</div>
                 <div class="cart-item-price">單價：${item.price}</div>
-                <div class="cart-item-price">小計：<span id="subtotal-${item.item_id}">${item.price * item.quantity}</span></div>
+                <div class="cart-item-price">
+                    小計：<span id="subtotal-${item.item_id}">
+                        ${item.price * item.quantity}
+                    </span>
+                </div>
             </div>
 
             <div class="cart-qty-control">
@@ -33,30 +40,49 @@ async function loadCart() {
                 <button onclick="changeQty(${item.item_id}, 1)">＋</button>
             </div>
 
-            <button onclick="removeItem(${item.item_id})" style="background:#d9534f;">移除</button>
+            <button onclick="removeItem(${item.item_id})"
+                    style="background:#d9534f;">
+                移除
+            </button>
         `;
 
         container.appendChild(div);
     });
 
     updateTotal();
+    syncSelectAll();
 }
 
 // ================================
-// 修改數量
+// 修改數量（安全版，不會卡 1）
 // ================================
 async function changeQty(itemId, delta) {
     const input = document.getElementById(`qty-${itemId}`);
     let value = parseInt(input.value) || 1;
-    value += delta;
-    if (value < 1) value = 1;
-    input.value = value;
 
     const item = cartData.find(i => i.item_id === itemId);
-    const subtotal = item.price * value;
+    if (!item) return;
 
-    document.getElementById(`subtotal-${itemId}`).textContent = subtotal;
+    value += delta;
 
+    // 下限
+    if (value < 1) value = 1;
+
+    // 上限（只有在 stock 存在時才限制）
+    if (typeof item.stock === "number") {
+        if (value > item.stock) {
+            value = item.stock;
+            alert(`庫存不足，最多只能購買 ${item.stock} 件`);
+        }
+    }
+
+    input.value = value;
+
+    // 更新小計
+    document.getElementById(`subtotal-${itemId}`).textContent =
+        item.price * value;
+
+    // 同步後端
     await fetch("/api/cart/update_quantity", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -70,7 +96,7 @@ async function changeQty(itemId, delta) {
 }
 
 // ================================
-// 更新總金額（只計算勾選的）
+// 更新總金額
 // ================================
 function updateTotal() {
     const checks = document.querySelectorAll(".cart-check");
@@ -79,12 +105,15 @@ function updateTotal() {
     checks.forEach((chk, index) => {
         if (chk.checked) {
             const item = cartData[index];
-            const qty = parseInt(document.getElementById(`qty-${item.item_id}`).value);
+            const qty = parseInt(
+                document.getElementById(`qty-${item.item_id}`).value
+            );
             total += item.price * qty;
         }
     });
 
-    document.getElementById("cartTotal").textContent = `總金額：${total}`;
+    document.getElementById("cartTotal").textContent =
+        `總金額：${total}`;
 }
 
 // ================================
@@ -97,17 +126,15 @@ function toggleSelectAll(all) {
 }
 
 // ================================
-// 單一項目勾選變動 → 同步全選
+// 單選同步全選
 // ================================
 function syncSelectAll() {
     const checks = document.querySelectorAll(".cart-check");
     const selectAll = document.getElementById("selectAll");
+    if (!selectAll) return;
 
-    // 所有項目都勾選 → 全選勾選
-    const allChecked = [...checks].every(c => c.checked);
-
-    // 只要有一個沒勾 → 全選取消
-    selectAll.checked = allChecked;
+    selectAll.checked =
+        checks.length > 0 && [...checks].every(c => c.checked);
 }
 
 // ================================
@@ -121,13 +148,9 @@ async function removeItem(itemId) {
     });
 
     const data = await res.json();
+    if (data.message) alert(data.message);
 
-    // 後端成功回傳後提示
-    if (data.message) {
-        alert(data.message);   // 例如：已移除商品
-    }
-
-    loadCart(); // 重新載入購物車
+    loadCart();
 }
 
 // ================================
@@ -157,18 +180,14 @@ async function checkout() {
 
     alert("結帳完成！");
 
-    // ★ 更新餘額（關鍵）
+    // 更新餘額
     if (data.new_money !== undefined) {
         document.getElementById("user-money").textContent = data.new_money;
     }
 
-    // 重新載入購物車
-    await loadCart();
-
-    // 取消全選
+    document.getElementById("cartTotal").textContent = "總金額：0";
     const selectAll = document.getElementById("selectAll");
     if (selectAll) selectAll.checked = false;
 
-    // 總金額歸零
-    document.getElementById("cartTotal").textContent = "總金額：0";
+    loadCart();
 }
